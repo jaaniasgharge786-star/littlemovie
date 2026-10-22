@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Movie - Watch & Download</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0f1015;
+            --bg-secondary: #181a20;
+            --bg-card: #20242f;
+            --accent-red: #ff2c55;
+            --accent-yellow: #ffb800;
+            --text-main: #ffffff;
+            --text-muted: #9ea3b0;
+            --border-color: #2d3240;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            padding-bottom: 40px;
+        }
+
+        /* Top Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 16, 21, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent-red), #ff6b00);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(255, 44, 85, 0.4);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-text .small {
+            font-size: 11px;
+            color: var(--accent-red);
+            font-weight: 700;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+        }
+
+        .brand-text .big {
+            font-size: 17px;
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Search Bar */
+        .search-box {
+            flex-grow: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 16px 8px 38px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-red);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Categories Bar */
+        .categories-nav {
+            display: flex;
+            gap: 10px;
+            padding: 12px 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .categories-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            box-shadow: 0 4px 12px rgba(255, 44, 85, 0.3);
+        }
+
+        /* Featured Slider / Banner */
+        .hero-container {
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+
+        .hero-banner {
+            position: relative;
+            height: 200px;
+            border-radius: 16px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: background-image 0.5s ease-in-out;
+            cursor: pointer;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(15,16,21,1) 0%, rgba(15,16,21,0.2) 60%, rgba(0,0,0,0.4) 100%);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .hero-badge {
+            background: var(--accent-yellow);
+            color: black;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            width: fit-content;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .hero-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Movie Section & Grid */
+        .section-container {
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 16px;
+            }
+            .hero-banner {
+                height: 280px;
+            }
+        }
+
+        .movie-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-poster {
+            position: relative;
+            width: 100%;
+            padding-top: 145%;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--bg-card);
+        }
+
+        .card-quality {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(0,0,0,0.75);
+            color: var(--accent-yellow);
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,184,0,0.3);
+        }
+
+        .card-info {
+            padding: 8px;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .card-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Movie Details Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        @media (min-width: 600px) {
+            .modal-backdrop {
+                align-items: center;
+            }
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px 20px 0 0;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @media (min-width: 600px) {
+            .modal-content {
+                border-radius: 20px;
+            }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .modal-hero {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .modal-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, var(--bg-secondary) 0%, transparent 100%);
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .modal-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* Screenshot Section */
+        .screenshots-box {
+            margin-top: 16px;
+        }
+
+        .screenshots-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .screenshot-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+            height: 100px;
+        }
+
+        .download-box {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .download-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent-yellow);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .dl-btn {
+            background: var(--accent-red);
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.2s;
+        }
+
+        .dl-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Episodes Grid */
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ep-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .ep-btn:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="brand-logo">
+            <div class="brand-icon"><i class="fa-solid fa-play"></i></div>
+            <div class="brand-text">
+                <span class="small">little</span>
+                <span class="big">MOVIE</span>
+            </div>
+        </a>
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search movies, series..." onkeyup="filterMovies()">
+        </div>
+    </header>
+
+    <!-- Categories -->
+    <div class="categories-nav">
+        <button class="cat-btn active" onclick="selectCategory('ALL')">ALL</button>
+        <button class="cat-btn" onclick="selectCategory('Trending')">🔥 Trending</button>
+        <button class="cat-btn" onclick="selectCategory('Hollywood')">🎬 Hollywood</button>
+        <button class="cat-btn" onclick="selectCategory('Hindi Dubbed')">🇮🇳 Hindi Dubbed</button>
+        <button class="cat-btn" onclick="selectCategory('Bollywood')">💃 Bollywood</button>
+        <button class="cat-btn" onclick="selectCategory('Punjabi')">🕺 Punjabi</button>
+        <button class="cat-btn" onclick="selectCategory('South Hindi')">💥 South Hindi</button>
+        <button class="cat-btn" onclick="selectCategory('Korean Drama')">🇰🇷 Korean Drama</button>
+    </div>
+
+    <!-- Featured Banner / Carousel -->
+    <div class="hero-container">
+        <div class="hero-banner" id="heroBanner">
+            <div class="hero-overlay">
+                <div class="hero-badge" id="heroBadge">FEATURED</div>
+                <div class="hero-title" id="heroTitle">Loading Latest Content...</div>
+                <div class="hero-meta" id="heroMeta">
+                    <span><i class="fa-solid fa-star" style="color:var(--accent-yellow)"></i> --</span>
+                    <span>2026</span>
+                    <span>HD</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content List -->
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-title" id="sectionHeading">All Latest Releases</div>
+        </div>
+        <div class="movie-grid" id="movieGrid">
+            <!-- Dynamic Content loaded from Google Sheets -->
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
+            <div class="modal-hero" id="modalHero">
+                <div class="modal-hero-overlay"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-title" id="modalTitle">Movie Title</div>
+                <div class="modal-tags" id="modalTags">
+                    <span class="tag">HD</span>
+                </div>
+                
+                <p id="modalDesc" style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+                    Loading details...
+                </p>
+
+                <!-- Screenshots Grid -->
+                <div class="screenshots-box" id="screenshotsBox" style="display: none;">
+                    <div class="screenshots-title"><i class="fa-solid fa-images"></i> Screenshots</div>
+                    <div class="screenshots-grid" id="screenshotsGrid">
+                        <!-- Dynamic Screenshots -->
+                    </div>
+                </div>
+
+                <!-- Download Options -->
+                <div class="download-box">
+                    <div class="download-title" id="downloadBoxTitle"><i class="fa-solid fa-download"></i> Download Options</div>
+                    <div id="modalLinksContainer">
+                        <!-- Dynamic Download Buttons or Episodes Grid -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sheet Integration Script -->
+    <script>
+        const SHEET_ID = '1tJiSPbSqt8-4i3OlYORN-8pwiiPz4mw3yQSBU3uLV74'; 
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+        let allMovies = [];
+        let currentCategory = "ALL";
+        let currentHeroIndex = 0;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchMoviesFromGoogleSheet();
+        });
+
+        async function fetchMoviesFromGoogleSheet() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const text = await response.text();
+                
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
+
+                allMovies = rows.map(row => {
+                    const cells = row.c;
+                    return {
+                        title: cells[0] ? cells[0].v : '',
+                        poster: cells[1] ? cells[1].v : '',
+                        category: cells[2] ? cells[2].v : 'Movie',
+                        quality: cells[3] ? cells[3].v : 'HD',
+                        rating: cells[4] ? cells[4].v : '8.0',
+                        description: cells[5] ? cells[5].v : 'لاجواب ہندی ڈبڈ مووی یا سیریز ڈاؤن لوڈ کریں۔',
+                        screenshots: cells[6] ? cells[6].v : '',
+                        download_link: cells[7] ? cells[7].v : '#',
+                        type: cells[8] ? cells[8].v : 'Movie',
+                        episodes: cells[9] ? cells[9].v : ''
+                    };
+                });
+
+                if (allMovies.length > 0) {
+                    renderMovies();
+                    updateHeroBanner();
+                    setInterval(updateHeroBanner, 4000);
+                } else {
+                    document.getElementById('movieGrid').innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">گوگل شیٹ میں ابھی کوئی مووی یا سیریز موجود نہیں ہے۔</div>`;
+                }
+            } catch (e) {
+                console.error("Sheet Fetch Error:", e);
+                document.getElementById('movieGrid').innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">گوگل شیٹ لوڈ کرنے میں مسئلہ آرہا ہے۔ برائے مہربانی چیک کریں۔</div>`;
+            }
+        }
+
+        function renderMovies() {
+            const grid = document.getElementById('movieGrid');
+            grid.innerHTML = '';
+
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = allMovies.filter(item => {
+                const matchesCat = (currentCategory === "ALL" || currentCategory === "Trending") 
+                                    ? true 
+  
